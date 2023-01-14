@@ -35,7 +35,7 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 #MyMesh2 = parseOBJ("Statue.obj",0,0.01)
 #MyMesh2 = parseOBJ("XYZCUBE.obj", 0, .01)
 #MyMesh2 = parseOBJ("teapotsimp.obj", 0, 0.1)
-MyMesh2 = parseOBJ("Bird.obj", 0, 0.008)
+MyMesh2 = parseOBJ("Bird.obj", 0, 0.004)
 #MyMesh2 = parseOBJ("Charmander.obj", 0, 0.01)
 MyMeshList = [MyMesh2]
 
@@ -99,6 +99,14 @@ class MWindow(arcade.Window):
             print("right")
             for i in self.myobjects:
                 i.translateupdateX(-.1)
+
+        if symbol == 65362:
+            for i in self.myobjects:
+                i.scaleTriangles(0.1)
+
+        if symbol == 65364:
+            for i in self.myobjects:
+                i.scaleTriangles(-0.1)
          
 
         if symbol == 113:
@@ -123,7 +131,6 @@ class MWindow(arcade.Window):
         for i in self.myobjects:
             i.ztheta += -dx/360
             i.xtheta += dy/360
-
 
 def main():
     mywindow = MWindow(SW, SH, "3D Test")

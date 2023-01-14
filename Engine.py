@@ -21,6 +21,9 @@ Adapted from video series by javidk9 on Youtube
 
 class TriVec3d(): #Baisc Vector class
     def __init__(self,x,y,z):
+        self.ox =x
+        self.oy =y
+        self.oz =z
         self.x = x
         self.y = y
         self.z = z
@@ -37,6 +40,12 @@ class Triangle3d(): #basic triangle class, holds 3 vectors
 
     def getaveZ(self): #get the average z value of the vetors
         self.aveZ = ((self.vects[0].z + self.vects[1].z + self.vects[2].z)/3)
+
+    def scale(self, dScale):
+        for i in self.vects:
+            i.x = i.ox* dScale
+            i.y = i.oy* dScale
+            i.z = i.oz* dScale
 
 
 
@@ -62,6 +71,7 @@ class Object3d():
         self.dxtheta = 0
         self.dztheta = 0
         self.zoffset = 4
+        self.mscale = 1
 
         self.vcam = TriVec3d(0,0,0)
 
@@ -226,7 +236,14 @@ class Object3d():
             for p in i.vects:
                 p.z += distance
 
-def multiplymatrixvector( Vector: TriVec3d, TransMatrix: list[[]]): #multply vectorss and matrix, simplified, only works for this aplication 
+    def scaleTriangles(self, DeltaScale):
+        self.mscale += DeltaScale
+        print(self.mscale)
+        for i in self.mesh.triangles:
+            i.scale(self.mscale)
+
+
+def multiplymatrixvector( Vector: TriVec3d, TransMatrix: list[:]): #multply vectorss and matrix, simplified, only works for this aplication 
     #print(Vector)
     x = (Vector.x * TransMatrix[0][0]) + (Vector.y * TransMatrix[1][0]) + (Vector.z * TransMatrix[2][0]) + (TransMatrix[3][
         0])
