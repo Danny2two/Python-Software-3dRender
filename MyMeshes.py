@@ -12,6 +12,9 @@ SH = 800
 This is the file that you should use to parse your 3d object file and start the engine. 
 Just replace path with the path to your obj, or use one of the ones provided.
 THIS IS MEANT FOR LOW POLY MODELS greater that about 5000 polygons might work but it will be SLOW
+- I recommend using this site https://lowpoly3d.xyz/ to reduce the polygons of models.
+    If your model will not work run it through the site as it can strip somethings that confuse my parser off
+    of the model. 
 
 Multiple files can be parsed and added to a list, they will all render in the same window 
 ****Multiple objects are not really supported well but it will "work"
@@ -39,7 +42,7 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 
 
 #MyMesh = Mesh3d([TriangleT1,TriangleT2,TriangleS1,TriangleS2,TriangleE1,TriangleE2,TriangleN1,TriangleN2,TriangleW1,TriangleW2,TriangleB1,TriangleB2])
-#THIS IS WHERE YOU ENTER IN YOR MODEL TO BE RENDERED
+#THIS IS WHERE YOU ENTER IN YOR MODEL TO BE RENDERED. often very small scales are needed to see properly
 MyMesh2 = parseOBJ("LowPolyStatue1872.obj", 0, 0.01) #path to obj, z offeset, scale
 MyMeshList = [MyMesh2]
 
