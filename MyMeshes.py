@@ -9,6 +9,14 @@ SW = 1000
 SH = 800
 
 '''
+This is the file that you should use to parse your 3d object file and start the engine. 
+Just replace path with the path to your obj, or use one of the ones provided.
+THIS IS MEANT FOR LOW POLY MODELS greater that about 5000 polygons might work but it will be SLOW
+
+Multiple files can be parsed and added to a list, they will all render in the same window 
+****Multiple objects are not really supported well but it will "work"
+
+
 #Testcube
 TriangleT1 = Triangle3d((TriVec3d(0, 1, 0), TriVec3d(0, 1, 1), TriVec3d(1, 1, 1)))
 TriangleT2 = Triangle3d((TriVec3d(0, 1, 0), TriVec3d(1, 1, 1), TriVec3d(1, 1, 0)))
@@ -31,10 +39,8 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 
 
 #MyMesh = Mesh3d([TriangleT1,TriangleT2,TriangleS1,TriangleS2,TriangleE1,TriangleE2,TriangleN1,TriangleN2,TriangleW1,TriangleW2,TriangleB1,TriangleB2])
-#MyMesh2 = parseOBJ("Statue.obj",0,0.01)
-#MyMesh2 = parseOBJ("XYZCUBE.obj", 0, .01)
-#MyMesh2 = parseOBJ("teapotsimp.obj", 0, 0.1)
-MyMesh2 = parseOBJ("XYZTEST.obj", 0, 0.2)
+#THIS IS WHERE YOU ENTER IN YOR MODEL TO BE RENDERED
+MyMesh2 = parseOBJ("LowPolyStatue1872.obj", 0, 0.01) #path to obj, z offeset, scale
 MyMeshList = [MyMesh2]
 
         
@@ -49,7 +55,8 @@ class MWindow(arcade.Window):
         self.set_update_rate(1/60) #1 / (TARGET FRAMERATE)
         arcade.set_background_color(arcade.color.BLACK)
         self.baseOBJ = MyMeshList[0]
-        self.baseOBJ.colorRGB = [0,200,200]
+        self.baseOBJ.colorRGB = [0,200,200] #Set the color of the model 
+        self.baseOBJ.lightvector = TriVec3d(0,1,-1) #sets the direction of the lights
         self.myobjects = MyMeshList
 
 
@@ -58,7 +65,7 @@ class MWindow(arcade.Window):
         arcade.start_render()
         for object in self.myobjects:
           object.on_draw(object.mesh)
-        arcade.draw_text(str(numpy.average(frametimes)),5,SH-20,arcade.color.PURPLE,12) #Draw Framerate
+        arcade.draw_text(str(numpy.average(frametimes)) + " FPS",5,SH-20,arcade.color.PURPLE,12) #Draw Framerate
 
     def update(self, delta_time: float):
         for object in self.myobjects:
@@ -76,25 +83,25 @@ class MWindow(arcade.Window):
         print(symbol)
 
         if symbol == 119:
-            print("up")
+            #print("up")
             for i in self.myobjects:
                 i.translateupdateZ(-0.5)
             
 
         if symbol == 115:
-            print("down")
+            #print("down")
             for i in self.myobjects:
                 i.translateupdateZ(0.5)
            
 
         if symbol == 97:
-            print("left")
+            #print("left")
             for i in self.myobjects:
                 i.translateupdateX(0.1)
            
 
         if symbol == 100:
-            print("right")
+            #print("right")
             for i in self.myobjects:
                 i.translateupdateX(-.1)
 
@@ -108,19 +115,19 @@ class MWindow(arcade.Window):
          
 
         if symbol == 113:
-            print("rotL")
+            #print("rotL")
             for i in self.myobjects:
                 i.dxtheta -= 0.01
         if symbol == 101:
-            print("rotR")
+            #print("rotR")
             for i in self.myobjects:
                 i.dxtheta += 0.01
         if symbol == 116:
-            print("rotL")
+            #print("rotL")
             for i in self.myobjects:
                 i.dztheta += 0.01
         if symbol == 103:
-            print("rotL")
+            #print("rotL")
             for i in self.myobjects:
                 i.dztheta -= 0.01
         
@@ -133,7 +140,7 @@ class MWindow(arcade.Window):
 def main():
     mywindow = MWindow(SW, SH, "3D Test")
     print(
-        "CONTROLS: ")
+        "CONTROLS:  Click and drag to rotate \n Q or E and T or G Will cause the model to spin \n Up arrow and down arrow scale the model \n WSAD move the model but this is broken")
     arcade.run()
 
 if __name__ == "__main__":

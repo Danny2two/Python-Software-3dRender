@@ -37,6 +37,7 @@ class TriVec3d(): #Baisc Vector class
 #This class holds 3 vectors to form a triagle. This is the "faces" of our model.
 #The order of the triangles in the list matters, This is refered to as "Winding order" If the face is wound
 #in the wrong direction the faces normal will be calculated incorectly (will be negative)
+#if the normalis calculated as the negative it will show through surfaces. 
 class Triangle3d(): #basic triangle class, holds 3 vectors
     def __init__(self, Vectors: list[TriVec3d]):
         self.vects = Vectors
@@ -70,7 +71,7 @@ class Mesh3d(): #basic mesh class, hold all of the triangles
 class Object3d():
     def __init__(self, mesh):
         self.colorRGB = [255,50,20]
-        self.lightvector = TriVec3d(1,-1,0) #direction light comes from 
+        self.lightvector = TriVec3d(1,1,0) #direction light comes from 
         self.ambientlight = [75,50,50] # Ambient light in the environmenmt shines on all faces
         self.mesh = mesh
         self.trans = []
