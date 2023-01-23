@@ -1,5 +1,6 @@
 import math
 import arcade
+import numpy
 from Engine import *
 from STLParser import *
 frametimes = [0,0,0,0,0,0,0,0,0,0]
@@ -35,7 +36,7 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 #MyMesh2 = parseOBJ("Statue.obj",0,0.01)
 #MyMesh2 = parseOBJ("XYZCUBE.obj", 0, .01)
 #MyMesh2 = parseOBJ("teapotsimp.obj", 0, 0.1)
-MyMesh2 = parseOBJ("Bird.obj", 0, 0.004)
+MyMesh2 = parseOBJ("Model.obj", 0, 0.004)
 #MyMesh2 = parseOBJ("Charmander.obj", 0, 0.01)
 MyMeshList = [MyMesh2]
 
@@ -48,7 +49,7 @@ class MWindow(arcade.Window):
         self.framecount = 0
         self.set_mouse_visible(True)
         self.set_vsync(True)
-        self.set_update_rate(1/200)
+        self.set_update_rate(1/60)
         arcade.set_background_color(arcade.color.BLACK)
         self.baseOBJ = MyMeshList[0]
         self.baseOBJ.colorRGB = [0,200,200]
@@ -60,7 +61,7 @@ class MWindow(arcade.Window):
         arcade.start_render()
         for object in self.myobjects:
           object.on_draw(object.mesh)
-        arcade.draw_text(numpy.average(frametimes),5,SH-20,arcade.color.PURPLE,12)
+        arcade.draw_text(str(numpy.average(frametimes)),5,SH-20,arcade.color.PURPLE,12)
 
     def update(self, delta_time: float):
         for object in self.myobjects:

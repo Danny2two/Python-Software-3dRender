@@ -1,7 +1,6 @@
 import math
 import arcade
 import numpy
-from numba import jit
 from copy import copy
 
 SW = 1000
