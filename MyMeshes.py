@@ -9,6 +9,8 @@ SW = 1000
 SH = 800
 
 '''
+Writen by: Daniel Mitchell
+
 This is the file that you should use to parse your 3d object file and start the engine. 
 Just replace path with the path to your obj, or use one of the ones provided.
 THIS IS MEANT FOR LOW POLY MODELS greater that about 5000 polygons might work but it will be SLOW
