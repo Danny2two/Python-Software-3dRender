@@ -1,6 +1,5 @@
 import math
 import arcade
-import numpy
 from copy import copy
 
 SW = 1000
@@ -15,22 +14,29 @@ Writen by: Daniel Mitchell
 
 Adapted from video series by javidk9 on Youtube
 
+This File does all the math needed to project triangles in 3d space onto a 2d screen. 
+
 '''
 
-
+#This class is the most basic representation of something in 3d space
+#Holds a X,Y,Z coordinate of a point.
+#ox represents "original x" used for storing a points original coordinates. 
 class TriVec3d(): #Baisc Vector class
     def __init__(self,x,y,z):
-        self.ox =x
+        self.ox =x 
         self.oy =y
         self.oz =z
         self.x = x
         self.y = y
         self.z = z
 
-    def __str__(self):
+    #Override the str method to allow these to be printed easly
+    def __str__(self): 
         return str((str(self.x), str(self.y), str(self.z)))
 
-
+#This class holds 3 vectors to form a triagle. This is the "faces" of our model.
+#The order of the triangles in the list matters, This is refered to as "Winding order" If the face is wound
+#in the wrong direction the faces normal will be calculated incorectly (will be negative)
 class Triangle3d(): #basic triangle class, holds 3 vectors
     def __init__(self, Vectors: list[TriVec3d]):
         self.vects = Vectors
@@ -40,7 +46,7 @@ class Triangle3d(): #basic triangle class, holds 3 vectors
     def getaveZ(self): #get the average z value of the vetors
         self.aveZ = ((self.vects[0].z + self.vects[1].z + self.vects[2].z)/3)
 
-    def scale(self, dScale):
+    def scale(self, dScale): #Scales the coorinates of the points according to some scale value.
         for i in self.vects:
             i.x = i.ox* dScale
             i.y = i.oy* dScale
@@ -58,10 +64,13 @@ class Mesh3d(): #basic mesh class, hold all of the triangles
             self.triangles.append( i)
         print( "Made a mesh with " + str(count) + " triangles")
 
+#The Object3d class is meant to represent one or multiple meshes. This is the object that has the methods
+#to project the mesh into 2d space. A better name for this class might me "projector" as it really only represents
+#math we can do to the meshes passed into it.
 class Object3d():
     def __init__(self, mesh):
         self.colorRGB = [255,50,20]
-        self.lightvector = TriVec3d(1,-1,-1) #direction light comes from 
+        self.lightvector = TriVec3d(1,-1,0) #direction light comes from 
         self.ambientlight = [75,50,50] # Ambient light in the environmenmt shines on all faces
         self.mesh = mesh
         self.trans = []
@@ -75,6 +84,7 @@ class Object3d():
         self.vcam = TriVec3d(0,0,0)
 
         # projectionmatrix
+        #This matrix is used to calculate the xy screenspace coordinates of a point, does not do rotation.
         Fnear = 0.1
         FFar = 1000
         FFov = 120
@@ -132,15 +142,15 @@ class Object3d():
         transformedtriangles = []
         for i in mesh.triangles: #Transform triangles indevidualy
             
-            tempvec0 = copy(i.vects[0])
+            tempvec0 = copy(i.vects[0]) #make a copy of all the vectors
             tempvec1 = copy(i.vects[1])
             tempvec2 = copy(i.vects[2])
 
-            rotvec0 = multiplymatrixvector(tempvec0, self.rotz)
+            rotvec0 = multiplymatrixvector(tempvec0, self.rotz)#apply rotation along z axis 
             rotvec1 = multiplymatrixvector(tempvec1, self.rotz)
             rotvec2 = multiplymatrixvector(tempvec2, self.rotz)
 
-            nrotvec0 = multiplymatrixvector(rotvec0, self.rotx)
+            nrotvec0 = multiplymatrixvector(rotvec0, self.rotx)#apply rotation along x axis 
             nrotvec1 = multiplymatrixvector(rotvec1, self.rotx)
             nrotvec2 = multiplymatrixvector(rotvec2, self.rotx)
 

@@ -46,7 +46,7 @@ def parseOBJ(OBJ_path, Zoffset, scale):
         line = line.strip("\n")
         
 
-        if line.startswith("v"):
+        if line.startswith("v "):
             splitline = line.split(" ")
             print(splitline)
             vertexlist.append(TriVec3d(float(splitline[1]) * scale,float(splitline[2])* scale,((float(splitline[3]) * scale)+ float(Zoffset))))
@@ -56,6 +56,12 @@ def parseOBJ(OBJ_path, Zoffset, scale):
         if line.startswith("f"):
             splitline = line.split(" ")
             print(splitline)
+            if splitline[1].count("/") > 0:
+                print("AHH")
+                splitline[1] = splitline[1].split("/")[0]
+                splitline[2] = splitline[2].split("/")[0]
+                splitline[3] = splitline[3].split("/")[0]
+
             trianglelist.append(Triangle3d([vertexlist[int(splitline[1])],vertexlist[int(splitline[2])],vertexlist[int(splitline[3])]]))
            
     createdmesh = Mesh3d(trianglelist)
