@@ -72,7 +72,8 @@ class Object3d():
     def __init__(self, mesh):
         self.colorRGB = [255,50,20]
         self.lightvector = TriVec3d(1,1,0) #direction light comes from 
-        self.ambientlight = [75,50,50] # Ambient light in the environmenmt shines on all faces
+        self.ambientlight = [15,10,10] # Ambient light in the environmenmt shines on all faces
+        self.ambienbtlightStr = 1
         self.mesh = mesh
         self.trans = []
         self.ztheta = 0
@@ -162,7 +163,7 @@ class Object3d():
             tlightvector.y /= lightnormallen
             tlightvector.z /= lightnormallen # make light vector a unit vector 
             dotprod = normal.x * tlightvector.x + normal.y * tlightvector.y + normal.z * tlightvector.z #dontproduct to see how much light hits face
-            mcolor = getshade(dotprod,self.colorRGB,self.ambientlight) #find the color resulting from the light 
+            mcolor = getshade(dotprod,self.colorRGB,self.ambientlight,self.ambienbtlightStr) #find the color resulting from the light 
 
             nrotvec0.z += self.zoffset #offset the face into the screen, trick to avoid math for cameras, for now
             nrotvec1.z += self.zoffset
@@ -289,7 +290,7 @@ def calcnormal(triangle): # calcualte normal of a face
     normalz /= len
     return(TriVec3d(normalx,normaly,normalz))
 
-def getshade(lum, color, ambientlight): #get shade of face based on "lumanance"
+def getshade(lum, color, ambientlight, ambstr): #get shade of face based on "lumanance"
     max = 255
     c0 = color[0]
     c1 = color[1]
@@ -302,9 +303,9 @@ def getshade(lum, color, ambientlight): #get shade of face based on "lumanance"
     c1 *= lum
     c2 *= lum
 
-    c0 += ambientlight[0]
-    c1 += ambientlight[1]
-    c2 += ambientlight[2]
+    c0 += ambientlight[0] * ambstr
+    c1 += ambientlight[1] * ambstr
+    c2 += ambientlight[2] * ambstr
 
     if c0 > color[0]:
         c0 = color[0]

@@ -3,6 +3,7 @@ import arcade
 import numpy
 from Engine import *
 from STLParser import *
+from  GenShapes import *
 frametimes = [0,0,0,0,0,0,0,0,0,0]
 
 SW = 1000
@@ -45,7 +46,9 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 
 #MyMesh = Mesh3d([TriangleT1,TriangleT2,TriangleS1,TriangleS2,TriangleE1,TriangleE2,TriangleN1,TriangleN2,TriangleW1,TriangleW2,TriangleB1,TriangleB2])
 #THIS IS WHERE YOU ENTER IN YOR MODEL TO BE RENDERED. often very small scales are needed to see properly
-MyMesh2 = parseOBJ("LowPolyStatue1872.obj", 0, 0.01) #path to obj, z offeset, scale
+#MyMesh2 = parseOBJ("XYZTEST.obj", 0, 0.5) #path to obj, z offeset, scale
+MyMesh2 = Object3d(Mesh3d([])) #Empty mesh, renders empty room.
+#MyMesh = parseOBJ("XYZTEST.obj",0,0.5)
 MyMeshList = [MyMesh2]
 
         
@@ -56,12 +59,15 @@ class MWindow(arcade.Window):
         super().__init__(SW, SH, title)
         self.framecount = 0
         self.set_mouse_visible(True)
-        self.set_vsync(True)
+        self.set_vsync(False)
         self.set_update_rate(1/60) #1 / (TARGET FRAMERATE)
-        arcade.set_background_color(arcade.color.BLACK)
+        self.BackColor = arcade.color.COOL_GREY
+        arcade.set_background_color(self.BackColor)
         self.baseOBJ = MyMeshList[0]
-        self.baseOBJ.colorRGB = [0,200,200] #Set the color of the model 
+        self.baseOBJ.colorRGB = [100,100,100] #Set the color of the model 
         self.baseOBJ.lightvector = TriVec3d(0,1,-1) #sets the direction of the lights
+        self.baseOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
+        self.baseOBJ.ambienbtlightStr = 0.3
         self.myobjects = MyMeshList
 
 
@@ -135,6 +141,15 @@ class MWindow(arcade.Window):
             #print("rotL")
             for i in self.myobjects:
                 i.dztheta -= 0.01
+        
+        if symbol == 110:
+            print("Making sphere!")
+            tempOBJ = genSphere(1,90)
+            tempOBJ.colorRGB = [100,100,100]
+            tempOBJ.lightvector = TriVec3d(0,1,-1) #sets the direction of the lights
+            tempOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
+            tempOBJ.ambienbtlightStr = 0.3
+            self.myobjects.append(tempOBJ)
         
 
     def on_mouse_drag(self, x: int, y: int, dx: int, dy: int, buttons: int, modifiers: int):
