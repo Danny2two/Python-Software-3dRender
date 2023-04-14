@@ -4,6 +4,7 @@ import numpy
 from Engine import *
 from STLParser import *
 from  GenShapes import *
+from Sphere import *
 frametimes = [0,0,0,0,0,0,0,0,0,0]
 
 SW = 1000
@@ -60,7 +61,7 @@ class MWindow(arcade.Window):
         self.framecount = 0
         self.set_mouse_visible(True)
         self.set_vsync(False)
-        self.set_update_rate(1/60) #1 / (TARGET FRAMERATE)
+        self.set_update_rate(1/61) #1 / (TARGET FRAMERATE)
         self.BackColor = arcade.color.COOL_GREY
         arcade.set_background_color(self.BackColor)
         self.baseOBJ = MyMeshList[0]
@@ -144,12 +145,18 @@ class MWindow(arcade.Window):
         
         if symbol == 110:
             print("Making sphere!")
-            tempOBJ = genSphere(1,90)
-            tempOBJ.colorRGB = [100,100,100]
-            tempOBJ.lightvector = TriVec3d(0,1,-1) #sets the direction of the lights
+            tempOBJ = sphere(0.25,1,1)
+            tempOBJ.colorRGB = [200,50,100]
+            tempOBJ.lightvector = TriVec3d(0,-1,-0.5) #sets the direction of the lights
             tempOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
-            tempOBJ.ambienbtlightStr = 0.3
+            tempOBJ.ambienbtlightStr = 0.5
             self.myobjects.append(tempOBJ)
+            
+        if symbol == 109:
+            for obj in self.myobjects:
+                if type(obj) == sphere:
+                    obj.subdivide(1)
+    
         
 
     def on_mouse_drag(self, x: int, y: int, dx: int, dy: int, buttons: int, modifiers: int):

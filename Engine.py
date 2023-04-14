@@ -63,7 +63,7 @@ class Mesh3d(): #basic mesh class, hold all of the triangles
         for i in listoftriangles:
             count += 1
             self.triangles.append( i)
-        print( "Made a mesh with " + str(count) + " triangles")
+        #print( "Made a mesh with " + str(count) + " triangles")
 
 #The Object3d class is meant to represent one or multiple meshes. This is the object that has the methods
 #to project the mesh into 2d space. A better name for this class might me "projector" as it really only represents
@@ -214,6 +214,7 @@ class Object3d():
 
             if wireframe: #Draw triangles 
                 arcade.draw_triangle_outline(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,arcade.color.WHITE)
+                arcade.draw_triangle_filled(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,triangle.color)
             else:
                 arcade.draw_triangle_filled(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,triangle.color)
                 #arcade.draw_triangle_outline(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,arcade.color.BLACK)
@@ -285,6 +286,7 @@ def calcnormal(triangle): # calcualte normal of a face
     normaly = line0z * line1x - line0x * line1z
     normalz = line0x * line1y - line0y * line1x
     len = math.sqrt(normalx*normalx + normaly*normaly + normalz*normalz)
+    
     normalx /= len
     normaly /= len
     normalz /= len
