@@ -35,7 +35,7 @@ class TriVec3d(): #Baisc Vector class
         return str((str(self.x), str(self.y), str(self.z)))
 
 #This class holds 3 vectors to form a triagle. This is the "faces" of our model.
-#The order of the triangles in the list matters, This is refered to as "Winding order" If the face is wound
+#The order of the vertex in the list matters, This is refered to as "Winding order" If the face is wound
 #in the wrong direction the faces normal will be calculated incorectly (will be negative)
 #if the normalis calculated as the negative it will show through surfaces. 
 class Triangle3d(): #basic triangle class, holds 3 vectors
@@ -47,12 +47,11 @@ class Triangle3d(): #basic triangle class, holds 3 vectors
     def getaveZ(self): #get the average z value of the vetors
         self.aveZ = ((self.vects[0].z + self.vects[1].z + self.vects[2].z)/3)
 
-    def scale(self, dScale): #Scales the coorinates of the points according to some scale value.
+    def scale(self, dScale:float): #Scales the coorinates of the points according to some scale value.
         for i in self.vects:
             i.x = i.ox* dScale
             i.y = i.oy* dScale
             i.z = i.oz* dScale
-
 
 
 
@@ -204,6 +203,8 @@ class Object3d():
         for tri in transformedtriangles: #update all of the average z for the triangles to rendered, sorth them from furthest to closest 
             tri.getaveZ()
         sortedmesh = sorted(transformedtriangles,key=lambda x: x.aveZ, reverse= True)
+        #skip sorting lol
+        #sortedmesh = transformedtriangles
         
 
         for triangle in sortedmesh:
@@ -293,7 +294,7 @@ def calcnormal(triangle): # calcualte normal of a face
     return(TriVec3d(normalx,normaly,normalz))
 
 def getshade(lum, color, ambientlight, ambstr): #get shade of face based on "lumanance"
-    max = 255
+    #max = 255
     c0 = color[0]
     c1 = color[1]
     c2 = color[2]

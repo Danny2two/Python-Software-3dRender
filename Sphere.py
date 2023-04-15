@@ -8,19 +8,19 @@ tri3 = TriVec3d(0.5,0,0)
 tri4 = TriVec3d(0,-0.5,0)
 
 #Upper half
-face0 = Triangle3d([tri0,tri1,tri2])
-face1 = Triangle3d([tri1,tri3,tri2])
-face2 = Triangle3d([tri3,tri4,tri2])
-face3 = Triangle3d([tri4,tri0,tri2])
+face0 = Triangle3d([tri2,tri1,tri0])
+face1 = Triangle3d([tri2,tri3,tri1])
+face2 = Triangle3d([tri2,tri4,tri3])
+face3 = Triangle3d([tri2,tri0,tri4])
 
 
 tri5 = TriVec3d(0,0,-0.5)
 
 #Lower half
-face4 = Triangle3d([tri0,tri5,tri1])
-face5 = Triangle3d([tri1,tri5,tri3])
-face6 = Triangle3d([tri3,tri5,tri4])
-face7 = Triangle3d([tri4,tri5,tri0])
+face4 = Triangle3d([tri1,tri5,tri0])
+face5 = Triangle3d([tri3,tri5,tri1])
+face6 = Triangle3d([tri4,tri5,tri3])
+face7 = Triangle3d([tri0,tri5,tri4])
 
 #Octahedron base
 basemesh = Mesh3d([face0,face1,face2,face3,face4,face5,face6,face7])
@@ -38,8 +38,9 @@ class sphere(Object3d):
         self.mesh = basemesh
         self.radius = radius
 
-        for triangle in self.mesh.triangles:
-            triangle.scale(radius*2)
+        self.sphereScale(radius)
+
+
         super().__init__(self.mesh)
 
     def subdivide(self,NumberOfSubDivs: int):
@@ -74,6 +75,11 @@ class sphere(Object3d):
 
         print("Subdivide finished with " + str(count) + " triangles.")
         self.mesh = newMesh
+
+    def sphereScale(self, radius: float):
+        for triangle in self.mesh.triangles:
+            for vect in triangle.vects:
+                normalizeANDmultiply(vect, radius)
         
     
 def midpoint(vector1: TriVec3d, vector2: TriVec3d):
@@ -98,6 +104,7 @@ def normalizeANDmultiply(vector: TriVec3d, radius: float):
     vector.x *= radius
     vector.y *= radius
     vector.z *= radius
+
 
 
 if __name__ == "__main__":

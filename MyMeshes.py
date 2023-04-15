@@ -61,14 +61,14 @@ class MWindow(arcade.Window):
         self.framecount = 0
         self.set_mouse_visible(True)
         self.set_vsync(False)
-        self.set_update_rate(1/61) #1 / (TARGET FRAMERATE)
+        self.set_update_rate(1/255) #1 / (TARGET FRAMERATE)
         self.BackColor = arcade.color.COOL_GREY
         arcade.set_background_color(self.BackColor)
         self.baseOBJ = MyMeshList[0]
         self.baseOBJ.colorRGB = [100,100,100] #Set the color of the model 
         self.baseOBJ.lightvector = TriVec3d(0,1,-1) #sets the direction of the lights
         self.baseOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
-        self.baseOBJ.ambienbtlightStr = 0.3
+        self.baseOBJ.ambienbtlightStr = 0.0
         self.myobjects = MyMeshList
 
 
@@ -119,11 +119,19 @@ class MWindow(arcade.Window):
 
         if symbol == 65362:
             for i in self.myobjects:
-                i.scaleTriangles(0.1)
+                if type(i) == sphere:
+                    i.radius += 0.1
+                    i.sphereScale(i.radius)
+                else:
+                    i.scaleTriangles(0.1)
 
         if symbol == 65364:
             for i in self.myobjects:
-                i.scaleTriangles(-0.1)
+                if type(i) == sphere:
+                    i.radius -= 0.1
+                    i.sphereScale(i.radius)
+                else:
+                    i.scaleTriangles(-0.1)
          
 
         if symbol == 113:
@@ -145,9 +153,9 @@ class MWindow(arcade.Window):
         
         if symbol == 110:
             print("Making sphere!")
-            tempOBJ = sphere(0.25,1,1)
+            tempOBJ = sphere(0.5,1,1)
             tempOBJ.colorRGB = [200,50,100]
-            tempOBJ.lightvector = TriVec3d(0,-1,-0.5) #sets the direction of the lights
+            tempOBJ.lightvector = TriVec3d(1,-1,0.2) #sets the direction of the lights
             tempOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
             tempOBJ.ambienbtlightStr = 0.5
             self.myobjects.append(tempOBJ)
