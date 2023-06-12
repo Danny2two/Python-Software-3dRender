@@ -34,20 +34,18 @@ basemesh = Mesh3d([face0,face1,face2,face3,face4,face5,face6,face7])
 #We can then subdivide each face and then place the new vertexes on the edge of the sphere
 #with more and more subdivisions we can aproximate a sphere more closely 
 class sphere(Object3d):
-    def __init__(self,radius: float, lod: int, zyx: list[int]):
+    def __init__(self,radius: float, lod: int, center: TriVec3d):
         self.mesh = basemesh
         self.radius = radius
+        self.center = center
 
         self.sphereScale(radius)
 
 
         super().__init__(self.mesh)
 
+
     def subdivide(self,NumberOfSubDivs: int):
-
-        #WRONG NEED TO USE MIDPOINT TO FIND NEW TRIANGLES
-
-        #print("sub divide")
 
         newMesh = Mesh3d([])
         count = 0
@@ -80,6 +78,19 @@ class sphere(Object3d):
         for triangle in self.mesh.triangles:
             for vect in triangle.vects:
                 normalizeANDmultiply(vect, radius)
+
+    def translate(self, newCenter: TriVec3d):
+        diffx = self.center.x - newCenter.x
+        diffy = self.center.y - newCenter.y
+        diffz = self.center.z - newCenter.z
+
+        self.center = newCenter
+
+        for tri in self.mesh.triangles:
+            for vect in tri:
+                vect.x += diffx
+                vect.y += diffy
+                vect.x += diffz
         
     
 def midpoint(vector1: TriVec3d, vector2: TriVec3d):
@@ -104,6 +115,7 @@ def normalizeANDmultiply(vector: TriVec3d, radius: float):
     vector.x *= radius
     vector.y *= radius
     vector.z *= radius
+
 
 
 

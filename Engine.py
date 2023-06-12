@@ -7,7 +7,7 @@ SH = 800
 AspectR = (SH/SW)
 FoVdeg = 90
 TransMatrix = []
-wireframe = False
+wireframe = True
 
 '''
 Writen by: Daniel Mitchell
