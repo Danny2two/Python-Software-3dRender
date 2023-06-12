@@ -48,8 +48,17 @@ TriangleB2 = Triangle3d((TriVec3d(1, 0, 1), TriVec3d(0, 0, 0), TriVec3d(1, 0, 0)
 #MyMesh = Mesh3d([TriangleT1,TriangleT2,TriangleS1,TriangleS2,TriangleE1,TriangleE2,TriangleN1,TriangleN2,TriangleW1,TriangleW2,TriangleB1,TriangleB2])
 #THIS IS WHERE YOU ENTER IN YOR MODEL TO BE RENDERED. often very small scales are needed to see properly
 #MyMesh2 = parseOBJ("XYZTEST.obj", 0, 0.5) #path to obj, z offeset, scale
-MyMesh2 = Object3d(Mesh3d([])) #Empty mesh, renders empty room.
-#MyMesh = parseOBJ("XYZTEST.obj",0,0.5)
+#MyMesh2 = Object3d(Mesh3d([])) #Empty mesh, renders empty room.
+MyMesh2 = parseOBJ("skull.obj",0,0.1)
+
+###### Odd experiment, giving a sphere a mesh it was never meant to have.....
+#tempOBJ = sphere(0.5,1,1)
+#tempOBJ.colorRGB = [200,50,100]
+#tempOBJ.lightvector = TriVec3d(1,-1,0.2) #sets the direction of the lights
+#tempOBJ.ambientlight = [100,100,100]
+#tempOBJ.ambienbtlightStr = 1
+#tempOBJ.mesh = parseOBJ("XYZCUBE.obj",0,0.02).mesh
+
 MyMeshList = [MyMesh2]
 
         
@@ -61,7 +70,7 @@ class MWindow(arcade.Window):
         self.framecount = 0
         self.set_mouse_visible(True)
         self.set_vsync(False)
-        self.set_update_rate(1/255) #1 / (TARGET FRAMERATE)
+        self.set_update_rate(1/144) #1 / (TARGET FRAMERATE)
         self.BackColor = arcade.color.COOL_GREY
         arcade.set_background_color(self.BackColor)
         self.baseOBJ = MyMeshList[0]
@@ -81,7 +90,7 @@ class MWindow(arcade.Window):
 
     def update(self, delta_time: float):
         for object in self.myobjects:
-            object.on_update()
+            object.on_update(delta_time / (1/144))
         
         if self.framecount >= 10:
             self.framecount = 0
@@ -157,13 +166,24 @@ class MWindow(arcade.Window):
             tempOBJ.colorRGB = [200,50,100]
             tempOBJ.lightvector = TriVec3d(1,-1,0.2) #sets the direction of the lights
             tempOBJ.ambientlight = [self.BackColor[0],self.BackColor[1],self.BackColor[2]]
-            tempOBJ.ambienbtlightStr = 0.5
+            tempOBJ.ambienbtlightStr = 1
             self.myobjects.append(tempOBJ)
             
         if symbol == 109:
             for obj in self.myobjects:
                 if type(obj) == sphere:
                     obj.subdivide(1)
+
+        if symbol == 99: #randomize triangle colors
+            for obj in self.myobjects:
+                for tri in obj.mesh.triangles:
+                    #print("Coloring!")
+                    tri.color = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+
+        if symbol == 65288:
+            for object in self.myobjects:
+                object.mesh = Mesh3d([])
+
     
         
 

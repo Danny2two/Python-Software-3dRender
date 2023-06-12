@@ -42,7 +42,7 @@ class Triangle3d(): #basic triangle class, holds 3 vectors
     def __init__(self, Vectors: list[TriVec3d]):
         self.vects = Vectors
         self.aveZ = 0
-        self.color = [0,0,0]
+        self.color = [0,0,100]
 
     def getaveZ(self): #get the average z value of the vetors
         self.aveZ = ((self.vects[0].z + self.vects[1].z + self.vects[2].z)/3)
@@ -69,7 +69,7 @@ class Mesh3d(): #basic mesh class, hold all of the triangles
 #math we can do to the meshes passed into it.
 class Object3d():
     def __init__(self, mesh):
-        self.colorRGB = [255,50,20]
+        self.colorRGB = [255,50,20] #Default color, gets over ridden by indevidual triangles colors if they area assigned later
         self.lightvector = TriVec3d(1,1,0) #direction light comes from 
         self.ambientlight = [15,10,10] # Ambient light in the environmenmt shines on all faces
         self.ambienbtlightStr = 1
@@ -83,6 +83,9 @@ class Object3d():
         self.mscale = 1
 
         self.vcam = TriVec3d(0,0,0)
+
+        for i in self.mesh.triangles:
+            i.color = self.colorRGB
 
         # projectionmatrix
         #This matrix is used to calculate the xy screenspace coordinates of a point, does not do rotation.
@@ -162,7 +165,7 @@ class Object3d():
             tlightvector.y /= lightnormallen
             tlightvector.z /= lightnormallen # make light vector a unit vector 
             dotprod = normal.x * tlightvector.x + normal.y * tlightvector.y + normal.z * tlightvector.z #dontproduct to see how much light hits face
-            mcolor = getshade(dotprod,self.colorRGB,self.ambientlight,self.ambienbtlightStr) #find the color resulting from the light 
+            mcolor = getshade(dotprod,i.color,self.ambientlight,self.ambienbtlightStr) #find the color resulting from the light 
 
             nrotvec0.z += self.zoffset #offset the face into the screen, trick to avoid math for cameras, for now
             nrotvec1.z += self.zoffset
@@ -220,9 +223,9 @@ class Object3d():
                 arcade.draw_triangle_filled(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,triangle.color)
                 #arcade.draw_triangle_outline(transvec0.x,transvec0.y,transvec1.x, transvec1.y,transvec2.x, transvec2.y,arcade.color.BLACK)
     
-    def on_update(self):
-        self.ztheta += self.dztheta
-        self.xtheta += self.dxtheta
+    def on_update(self, timejump):
+        self.ztheta += self.dztheta * timejump
+        self.xtheta += self.dxtheta * timejump
         self.rotz[0][0] = math.cos(self.ztheta)
         self.rotz[0][1] = math.sin(self.ztheta)
         self.rotz[1][0] = -math.sin(self.ztheta)

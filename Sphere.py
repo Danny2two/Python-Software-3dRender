@@ -51,6 +51,7 @@ class sphere(Object3d):
         count = 0
         for triangle in self.mesh.triangles:
             
+            tempc = triangle.color
             point01 = midpoint(triangle.vects[0],triangle.vects[1])
             point12 = midpoint(triangle.vects[1],triangle.vects[2])
             point20 = midpoint(triangle.vects[2],triangle.vects[0])
@@ -63,6 +64,12 @@ class sphere(Object3d):
             ntri1 = Triangle3d([point01, triangle.vects[1], point12])
             ntri2 = Triangle3d([point20, point12, triangle.vects[2]])
             ntri3 = Triangle3d([point20, point01, point12])
+
+            ntri0.color = tempc
+            ntri1.color = tempc
+            ntri2.color = tempc
+            ntri3.color = tempc
+
 
             newMesh.triangles.append(ntri0)
             newMesh.triangles.append(ntri1)
